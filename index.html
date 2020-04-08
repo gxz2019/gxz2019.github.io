@@ -17,7 +17,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"gxz2019.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"gxz2019.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta property="og:type" content="website">
@@ -113,14 +113,19 @@
     <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
 
   </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
         <li class="menu-item menu-item-archives">
 
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
 
   </li>
   </ul>
@@ -175,7 +180,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-08 10:55:00 / 修改时间：10:55:42" itemprop="dateCreated datePublished" datetime="2020-04-08T10:55:00+08:00">2020-04-08</time>
+              <time title="创建时间：2020-04-08 10:55:00 / 修改时间：14:05:13" itemprop="dateCreated datePublished" datetime="2020-04-08T10:55:00+08:00">2020-04-08</time>
             </span>
 
           
@@ -192,59 +197,14 @@
           <h1 id="html"><a href="#html" class="headerlink" title="html"></a>html</h1><h4 id="你是如何理解html语义化的？"><a href="#你是如何理解html语义化的？" class="headerlink" title="你是如何理解html语义化的？"></a>你是如何理解html语义化的？</h4><blockquote>
 <p>所谓html语义化就是使用恰当的标签去展示恰当的内容，比如标题就用h1标签，段落就用p标签，列表就用ul、ol标签等等。最开始的时候前端布局是table标签，页面布局很杂乱，后来又使用div+css布局，但是本质上还是没有区分每一块div的作用和意义。所以html语义化是很重要的，这样让页面有良好的结构，dom结构也更加清晰，使得代码更好的维护和可读。</p>
 </blockquote>
-<h4 id="meta-viewport-是做什么的？怎么写？"><a href="#meta-viewport-是做什么的？怎么写？" class="headerlink" title="meta viewport 是做什么的？怎么写？"></a>meta viewport 是做什么的？怎么写？</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta name&#x3D;&quot;viewport&quot; content&#x3D;&quot;width&#x3D;device-width, user-scalable&#x3D;no, initial-scale&#x3D;1.0, maximum-scale&#x3D;1.0, minimum-scale&#x3D;1.0&quot;&gt;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>上面的标签为一个meta标签，name为viewport表示提供移动设备使用，content提供了viewport的属性：</p>
-<ul>
-<li>width为device-width表示在移动设备下显示的宽度为该设备的宽度</li>
-<li>user-scalable表示用户能否缩放网页，no表示不能</li>
-<li>initial-scale表示设备与视口的缩放比例</li>
-<li>maximum-scale和minimum-scale表示缩放的最大值和最小值，若user-scalable为no则没用</li>
-</ul>
-</blockquote>
-<blockquote>
-<p>meta viewport就是专门为网页在移动端设备下显示所设计的。</p>
-</blockquote>
-<h4 id="你用过哪些-HTML-5-标签？"><a href="#你用过哪些-HTML-5-标签？" class="headerlink" title="你用过哪些 HTML 5 标签？"></a>你用过哪些 HTML 5 标签？</h4><blockquote>
-<ul>
-<li>article:用于表示一篇文章的具体内容，一般为文字集中显示的区域</li>
-<li>header: 页面主体上的头部</li>
-<li>nav：专门用于菜单导航、链接导航的标记</li>
-<li>section：定义文章，定义文档中的节，类似于div</li>
-<li>time：定义时间或日期</li>
-<li>video： 定义视频,src引入资源，constrols视频的控制控件，autoplay是否自动播放</li>
-<li>audio：定义音频，比如放音乐，constrols音频的控制控件</li>
-<li>datalist:表单标记，通常放在input标签中，当作列表</li>
-<li>canvas: 画布标记，使用js来绘制图形            <figure class="highlight plain"><figcaption><span>id</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这就是一个w150 h150的画布，canvas标签只有两个属性width和height </span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</blockquote>
-<html>
- <head>
-  <script type="application/javascript">
-    function draw() {
-      var canvas = document.getElementById("canvas");
-      if (canvas.getContext) {
-        var ctx = canvas.getContext("2d");
-        ctx.fillStyle = "rgb(200,0,0)";
-        ctx.fillRect (10, 10, 55, 50);
-        ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
-        ctx.fillRect (30, 30, 55, 50);
-      }
-    }
-  </script>
- </head>
- <body onload="draw();">
-   <canvas id="canvas" width="150" height="150"></canvas>
- </body>
-</html>
-```
-#### h5是什么？
->h5指的是移动端页面，其实是技术的合集而不是一门技术，h5是一种技术的标准，也可以说是一种解决方案，比如要开发一个移动端很炫酷的网页，这个解决方案不仅包含了html5的新增标签，还包含了其他前端的知识。主要是技术的合集
-
-
-
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/04/08/note/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -288,7 +248,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-08 10:11:47 / 修改时间：10:24:47" itemprop="dateCreated datePublished" datetime="2020-04-08T10:11:47+08:00">2020-04-08</time>
+              <time title="创建时间：2020-04-08 10:11:47 / 修改时间：14:05:03" itemprop="dateCreated datePublished" datetime="2020-04-08T10:11:47+08:00">2020-04-08</time>
             </span>
 
           
@@ -313,22 +273,14 @@
 <li>….</li>
 </ul>
 </blockquote>
-<h4 id="3-代码实现"><a href="#3-代码实现" class="headerlink" title="3.代码实现"></a>3.代码实现</h4> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">debounce</span>(<span class="params">fn,wait,imme</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> timeout;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(timeout) clearTimeout(timeout)</span><br><span class="line">    <span class="keyword">if</span>(imme == <span class="literal">true</span>) &#123; <span class="comment">//事件发生时立即执行</span></span><br><span class="line">      <span class="keyword">let</span> run = !timeout;</span><br><span class="line">      timeout = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        timeout = <span class="literal">null</span></span><br><span class="line">      &#125;,wait)</span><br><span class="line">      <span class="keyword">if</span>(run) fn.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>)</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;   <span class="comment">//不立即执行</span></span><br><span class="line">      timeout = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        fn.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>)</span><br><span class="line">      &#125;,wait)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="节流"><a href="#节流" class="headerlink" title="节流"></a>节流</h2><h4 id="1-定义-1"><a href="#1-定义-1" class="headerlink" title="1.定义"></a>1.定义</h4><blockquote>
-<p>当发生连续触发事件时，每一次事件处理函数的执行都相隔n秒</p>
-</blockquote>
-<h4 id="2-场景-1"><a href="#2-场景-1" class="headerlink" title="2.场景"></a>2.场景</h4><blockquote>
-<ul>
-<li>当滚动页面进行图片懒加载时，可以降低监听滚动条的位置执行的频率</li>
-<li>做商品预览图的放大镜效果时，降低鼠标移动计算位置执行的频率</li>
-</ul>
-</blockquote>
-<h4 id="3-代码实现-1"><a href="#3-代码实现-1" class="headerlink" title="3.代码实现"></a>3.代码实现</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">fn,wait</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> timeout=<span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(!timeout) &#123;</span><br><span class="line">      timeout = setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        fn.apply(<span class="keyword">this</span>,<span class="built_in">arguments</span>)</span><br><span class="line">        timeout = <span class="literal">null</span></span><br><span class="line">      &#125;,wait)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/04/08/%E9%98%B2%E6%8A%96%E8%8A%82%E6%B5%81/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -487,6 +439,14 @@
       </div>
   </nav>
 </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gxz2019" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gxz2019" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1173017852@qq.com" title="E-Mail → 1173017852@qq.com"><i class="fa fa-Email fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
 
 
 

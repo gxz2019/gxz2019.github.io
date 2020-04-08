@@ -960,6 +960,7 @@ pre .javascript .function {
   display: flex;
   flex-shrink: 0;
   padding: 0 10px;
+  background: #008c8c;
 }
 .headband {
   background: #222;
@@ -1170,7 +1171,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #403861;
+  background: #fff058;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1496,10 +1497,7 @@ pre .javascript .function {
   position: fixed;
   transition-property: bottom;
   z-index: 1300;
-  width: 24px;
-}
-.back-to-top span {
-  display: none;
+  width: initial;
 }
 .back-to-top:hover {
   color: #fc6423;
@@ -1543,6 +1541,12 @@ pre .javascript .function {
 .post-button {
   margin-top: 40px;
   text-align: center;
+}
+.use-motion {
+  background: url("/images/bg.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50% 50%;
 }
 .use-motion .post-block,
 .use-motion .pagination,
@@ -2227,9 +2231,6 @@ ul.breadcrumb li + li:last-child {
     padding-right: 0;
     width: auto;
   }
-}
-.site-brand-container {
-  background: #222;
 }
 @media (max-width: 991px) {
   .site-brand-container {
