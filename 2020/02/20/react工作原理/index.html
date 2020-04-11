@@ -23,19 +23,19 @@
   <meta name="description" content="参考：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;yikuu&#x2F;p&#x2F;9660932.html Reactjs 起源于Facebook内部项目，是一个用来构建用户界面的 javascript 库，相当于MVC架构中的V层框架，与市面上其他框架不同的是，React 把每一个组件当成了一个状态机，组件内部通过state来维护组件状态的变化，当组件的状态发生变化时，React通过虚拟DOM技术来增量并且">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅谈react的工作原理">
-<meta property="og:url" content="https://gxz2019.github.io/2020/02/20/react%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/index.html">
+<meta property="og:url" content="https://gxz2019.github.io/2020/02/20/react%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/index.html">
 <meta property="og:site_name" content="北方的鬼">
 <meta property="og:description" content="参考：https:&#x2F;&#x2F;www.cnblogs.com&#x2F;yikuu&#x2F;p&#x2F;9660932.html Reactjs 起源于Facebook内部项目，是一个用来构建用户界面的 javascript 库，相当于MVC架构中的V层框架，与市面上其他框架不同的是，React 把每一个组件当成了一个状态机，组件内部通过state来维护组件状态的变化，当组件的状态发生变化时，React通过虚拟DOM技术来增量并且">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://seo-1255598498.file.myqcloud.com/full/303368f0933da6f35f33151db7dfa28e07ee34cb.jpg">
 <meta property="article:published_time" content="2020-02-20T04:28:37.000Z">
-<meta property="article:modified_time" content="2020-04-10T08:26:32.992Z">
+<meta property="article:modified_time" content="2020-04-10T13:02:04.280Z">
 <meta property="article:author" content="gxz">
 <meta property="article:tag" content="React">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://seo-1255598498.file.myqcloud.com/full/303368f0933da6f35f33151db7dfa28e07ee34cb.jpg">
 
-<link rel="canonical" href="https://gxz2019.github.io/2020/02/20/react%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+<link rel="canonical" href="https://gxz2019.github.io/2020/02/20/react%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/">
 
 
 <script id="page-configurations">
@@ -130,9 +130,9 @@
     <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
 
   </li>
-        <li class="menu-item menu-item-categories">
+        <li class="menu-item menu-item-tags">
 
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
 
   </li>
   </ul>
@@ -163,7 +163,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://gxz2019.github.io/2020/02/20/react%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+    <link itemprop="mainEntityOfPage" href="https://gxz2019.github.io/2020/02/20/react%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img5.imgtn.bdimg.com/it/u=1172245122,2404902455&fm=26&gp=0.jpg">
@@ -316,13 +316,15 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
         <span class="site-state-item-count">3</span>
-        <span class="site-state-item-name">标签</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
