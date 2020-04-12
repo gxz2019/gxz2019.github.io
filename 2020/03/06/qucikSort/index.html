@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"gxz2019.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="JS的两种继承方式寄生组合继承 123456789101112131415161718192021function Parent()&amp;#123; this.name &#x3D; &#39;gxz&#39; this.say &#x3D; function() &amp;#123;   console.log(this.name) &amp;#125;&amp;#125;Parent.prototype &#x3D; &amp;#123;  sex:&#39;male&#39;,  eat">
+  <meta name="description" content="快速排序123456789101112131415161718192021222324let arr &#x3D; [20,3,44,15,12,75,13]function quickSort(nums) &amp;#123;  if(nums.length &lt;&#x3D; 1) &amp;#123;    return nums  &amp;#125;  let temp &#x3D; nums[0];  let left &#x3D; 0,righ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="js继承">
-<meta property="og:url" content="https://gxz2019.github.io/2020/02/22/js%E7%BB%A7%E6%89%BF/index.html">
+<meta property="og:title" content="qucikSort">
+<meta property="og:url" content="https://gxz2019.github.io/2020/03/06/qucikSort/index.html">
 <meta property="og:site_name" content="北方的鬼">
-<meta property="og:description" content="JS的两种继承方式寄生组合继承 123456789101112131415161718192021function Parent()&amp;#123; this.name &#x3D; &#39;gxz&#39; this.say &#x3D; function() &amp;#123;   console.log(this.name) &amp;#125;&amp;#125;Parent.prototype &#x3D; &amp;#123;  sex:&#39;male&#39;,  eat">
+<meta property="og:description" content="快速排序123456789101112131415161718192021222324let arr &#x3D; [20,3,44,15,12,75,13]function quickSort(nums) &amp;#123;  if(nums.length &lt;&#x3D; 1) &amp;#123;    return nums  &amp;#125;  let temp &#x3D; nums[0];  let left &#x3D; 0,righ">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-02-22T09:15:32.000Z">
-<meta property="article:modified_time" content="2020-04-10T09:26:55.086Z">
+<meta property="article:published_time" content="2020-03-06T13:43:04.000Z">
+<meta property="article:modified_time" content="2020-04-12T14:13:56.814Z">
 <meta property="article:author" content="gxz">
-<meta property="article:tag" content="JS">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://gxz2019.github.io/2020/02/22/js%E7%BB%A7%E6%89%BF/">
+<link rel="canonical" href="https://gxz2019.github.io/2020/03/06/qucikSort/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>js继承 | 北方的鬼</title>
+  <title>qucikSort | 北方的鬼</title>
   
 
 
@@ -161,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://gxz2019.github.io/2020/02/22/js%E7%BB%A7%E6%89%BF/">
+    <link itemprop="mainEntityOfPage" href="https://gxz2019.github.io/2020/03/06/qucikSort/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://img5.imgtn.bdimg.com/it/u=1172245122,2404902455&fm=26&gp=0.jpg">
@@ -174,7 +174,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          js继承
+          qucikSort
         </h1>
 
         <div class="post-meta">
@@ -184,7 +184,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-02-22 17:15:32" itemprop="dateCreated datePublished" datetime="2020-02-22T17:15:32+08:00">2020-02-22</time>
+              <time title="创建时间：2020-03-06 21:43:04" itemprop="dateCreated datePublished" datetime="2020-03-06T21:43:04+08:00">2020-03-06</time>
             </span>
 
           
@@ -198,10 +198,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="JS的两种继承方式"><a href="#JS的两种继承方式" class="headerlink" title="JS的两种继承方式"></a>JS的两种继承方式</h2><p><strong>寄生组合继承</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Parent</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> <span class="keyword">this</span>.name = <span class="string">'gxz'</span></span><br><span class="line"> <span class="keyword">this</span>.say = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">   <span class="built_in">console</span>.log(<span class="keyword">this</span>.name)</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line">Parent.prototype = &#123;</span><br><span class="line">  sex:<span class="string">'male'</span>,</span><br><span class="line">  eat:<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'eateateat'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Child</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  Parent.call(<span class="keyword">this</span>);</span><br><span class="line">  <span class="keyword">this</span>.age = <span class="number">18</span></span><br><span class="line">&#125;</span><br><span class="line">Child.prototype = <span class="built_in">Object</span>.create(Parent.prototype);</span><br><span class="line">Child.prototype.constructor = Child</span><br><span class="line"><span class="keyword">let</span> a = <span class="keyword">new</span> Child();</span><br><span class="line">a.say()  <span class="comment">//gxz</span></span><br><span class="line">a.eat()  <span class="comment">//eateateat</span></span><br></pre></td></tr></table></figure>
-
-<p><strong>ES6的class关键字extends继承</strong><br>其实extends关键字也是封装了一个组合继承，本质上差别不大</p>
+        <h2 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr = [<span class="number">20</span>,<span class="number">3</span>,<span class="number">44</span>,<span class="number">15</span>,<span class="number">12</span>,<span class="number">75</span>,<span class="number">13</span>]</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">quickSort</span>(<span class="params">nums</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(nums.length &lt;= <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> nums</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> temp = nums[<span class="number">0</span>];</span><br><span class="line">  <span class="keyword">let</span> left = <span class="number">0</span>,right = nums.length <span class="number">-1</span>;</span><br><span class="line">  <span class="keyword">while</span>(left &lt; right) &#123;</span><br><span class="line">    <span class="keyword">while</span>(left &lt; right &amp;&amp; nums[right] &gt; temp) &#123;</span><br><span class="line">      right--</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(nums[right] &lt; temp) &#123;</span><br><span class="line">      nums[left] = nums[right]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span>(left &lt; right &amp;&amp; nums[left] &lt; temp) &#123;</span><br><span class="line">      left++</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(nums[left] &gt; temp) &#123;</span><br><span class="line">      nums[right] = nums[left]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> [...quickSort(nums.slice(<span class="number">0</span>,left)),temp,...quickSort(nums.slice(left+<span class="number">1</span>))]</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(quickSort(arr))  <span class="comment">//[3, 12, 13, 15, 20, 44, 75]</span></span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -211,7 +208,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/JS/" rel="tag"># JS</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
           </div>
 
         
@@ -220,12 +217,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/02/20/react%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/" rel="prev" title="浅谈react的工作原理">
-      <i class="fa fa-chevron-left"></i> 浅谈react的工作原理
+    <a href="/2020/03/05/js%E6%B7%B1%E6%B5%85%E6%8B%B7%E8%B4%9D/" rel="prev" title="js深浅拷贝">
+      <i class="fa fa-chevron-left"></i> js深浅拷贝
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/02/24/react%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/" rel="next" title="react生命周期详解">
-      react生命周期详解 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/04/12/1/" rel="next" title="1">
+      1 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -285,7 +282,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JS的两种继承方式"><span class="nav-number">1.</span> <span class="nav-text">JS的两种继承方式</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#快速排序"><span class="nav-number">1.</span> <span class="nav-text">快速排序</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
