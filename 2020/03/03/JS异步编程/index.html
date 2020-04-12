@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"gxz2019.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="作者：酸楚与甘甜链接：https:&#x2F;&#x2F;juejin.im&#x2F;post&#x2F;5b56c3586fb9a04faa79a8e0来源：掘金 为什么要有同步异步？首先JS是一个单线程的语言。单线程的含义类似于从头走到尾，谁也别管谁，前面堵车我就停（官方：单线程在程序执行时，所走的程序路径按照连续顺序排下来，前面的必须处理好，后面的才会执行。），没办法开多个线程。 疑问来了？为什么JS不设计成多线程的可以开多个线">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS异步编程(1)">
+<meta property="og:url" content="https://gxz2019.github.io/2020/03/03/JS%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="北方的鬼">
+<meta property="og:description" content="作者：酸楚与甘甜链接：https:&#x2F;&#x2F;juejin.im&#x2F;post&#x2F;5b56c3586fb9a04faa79a8e0来源：掘金 为什么要有同步异步？首先JS是一个单线程的语言。单线程的含义类似于从头走到尾，谁也别管谁，前面堵车我就停（官方：单线程在程序执行时，所走的程序路径按照连续顺序排下来，前面的必须处理好，后面的才会执行。），没办法开多个线程。 疑问来了？为什么JS不设计成多线程的可以开多个线">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-03T02:14:51.000Z">
+<meta property="article:modified_time" content="2020-04-12T03:00:11.881Z">
+<meta property="article:author" content="gxz">
+<meta property="article:tag" content="JS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://gxz2019.github.io/2020/03/03/JS%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JS异步编程(1) | 北方的鬼</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">北方的鬼</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://gxz2019.github.io/2020/03/03/JS%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img5.imgtn.bdimg.com/it/u=1172245122,2404902455&fm=26&gp=0.jpg">
+      <meta itemprop="name" content="gxz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="北方的鬼">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JS异步编程(1)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-03 10:14:51" itemprop="dateCreated datePublished" datetime="2020-03-03T10:14:51+08:00">2020-03-03</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>作者：酸楚与甘甜<br>链接：<a href="https://juejin.im/post/5b56c3586fb9a04faa79a8e0" target="_blank" rel="noopener">https://juejin.im/post/5b56c3586fb9a04faa79a8e0</a><br>来源：掘金</p>
+<h2 id="为什么要有同步异步？"><a href="#为什么要有同步异步？" class="headerlink" title="为什么要有同步异步？"></a>为什么要有同步异步？</h2><p>首先JS是一个单线程的语言。单线程的含义类似于从头走到尾，谁也别管谁，前面堵车我就停（官方：单线程在程序执行时，所走的程序路径按照连续顺序排下来，前面的必须处理好，后面的才会执行。），没办法开多个线程。</p>
+<p>疑问来了？为什么JS不设计成多线程的可以开多个线程同时操作。JS是可以去操作DOM的。假设JS设计成一个多线程语言。你的主线程在给DOM的innerHtml做一个赋值操作，你的另一个线程把这个DOM结构删除了。。。。这肯定不可以。（多线程可以互不干预的操作一段内存空间）。所以干脆设计成一个单线程，哪怕后期HTML5出现的web worker也是不允许操作DOM结构的，可以完成一些分布式的计算。对于dom结构我们必须顺序操纵，坚决不允许出现对同一个dom同时进行操作。</p>
+<a id="more"></a>
+<p>但是浏览器加载一些需要网络请求的比如图片资源、ajax。或者轮训的内容。由于是单线程，需要等待这些内容访问完才可以执行下面的代码。那么你发个ajax请求或者请求个图片资源，那么这段时间就什么也做不了，这种效果对程序是一种阻塞，在等待时间明明可以做些别的事情却选择了无意义的等待。（同步阻塞）这个时候异步就出现了，在涉及需要等待的操作，我们选择让程序继续运行，在等待时间结束的时候，通知一下我们的程序内容执行完毕，你可以操作这些资源了，这段等待时间并不影响你程序的继续执行，只是在未来的某个时间段（不确定），有一个操作一定会执行，这就是异步。（异步非阻塞），这就是为什么要有同步异步。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;<span class="built_in">console</span>.log(<span class="number">111</span>)&#125;,<span class="number">500</span>);</span><br></pre></td></tr></table></figure>
+<p>请问打印出111会在什么时候？ 答案是500ms的时候打印<br>错！答案是500ms或者500ms以后的某个时间段。<br>首先遇见定时器后，会将定时器内的函数进行注册，也就是放入Event Table 。然后在500ms后将Event Table内注册的函数放入 Event queue。若主线程（我也就一个线程）中的call stack（调用堆栈，也就是线程中函数的一个调用栈）为空就将Event queue按顺序的放入call stack中进行执行。如果call stack并不为空， Event queue内的事件并不会进入call stack中，也就不会执行。<br>怎么突然来了这么多乱七八糟，画风和刚才不一样呀。难度上来了。</p>
+<p>首先对于异步事件，我们在执行到这行代码的时候会进行一个注册，将你要在未来某个时间段要执行的函数注册一下，放在Event table中。这个Event table中可以有很多事件，比如你一次发了好多ajax请求，那么他们就全部注册了。在未来的时间到了，就会把注册的事件放入Event queue（任务队列）这个任务队列就是马上要执行的内容。<br>任务队列什么时候可以执行？在主线程的call stack为空的时候，会把任务队列的第一个事件放入call stack中执行，这里面涉及一个queue（队列）的特点就是先进先出。在注册后先放入Event queue的事件就会更早的离开Event queue进入主线程执行。这个时候是不是觉得自己明白点了？ 唉别高兴的太早了。</p>
+<p><strong>宏任务和微任务</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;<span class="built_in">console</span>.log(<span class="number">111</span>)&#125;,<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>)=&gt;</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="number">222</span>);</span><br><span class="line">	resolve(<span class="number">3333</span>)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> promise2 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>)=&gt;</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="number">555</span>);</span><br><span class="line">	resolve(<span class="number">6666</span>)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="number">4444</span>);</span><br><span class="line">&#125;,<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">promise.then(<span class="function"><span class="params">res</span>=&gt;</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(res);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">promise2.then(<span class="function"><span class="params">res</span>=&gt;</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(res);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>你说这会打印出个什么？ 按理论先进先出，222 555 111 4444 333 666 你看对不对。<br>事实证明：222 555 333 666 111 4444<br>这是为什么？ 首先注册的事件也有不同形态，宏任务与微任务。<br>常见的宏任务：setTimeout、setInterval（定时器类）<br>常见的微任务：promise process.nextTick(一个node环境的方法)。<br>这两个任务的执行规则是什么？首先在call stack中的内容执行完毕清空后，会在Event queue检查一下哪些是宏任务哪些是微任务，然后执行所有的微任务，然后执行一个宏任务，之后再次执行所有的微任务。也就是说在主线程任务执行完毕后会把任务队列中的微任务全部执行，然后再执行一个宏任务，这个宏任务执行完再次检查队列内部的微任务，有就全部执行没有就再执行一个宏任务。</p>
+<p><strong>为什么我一行独立的异步的代码也写不出来</strong><br>在这个概念理解清楚之后，我大约明白一些了，可是我就是一行真正的脱离了定时器、事件、ajax的异步的代码也写不出来，我一直在想如何实现消息通知异步的消息通知？观察者模式吗？那也没办法模拟出来，10分钟之后我要做一个任务。想了很久。<br>在有一天需求评审中，我们要做一个定时提醒的需求，这个时候后台的任务分配中选择了几天来制作定时任务。这个时候我理解了。java的定时提醒是要开一个新的线程去不断轮巡时间，可以设置的间隔但是间隔越小，越消耗机器的性能。后来查阅资料了解，JS是单线程，但是浏览器不是，只是执行JS代码的引擎是个单线程的所以JS的代码没办法开启多个线程，但是浏览器还有定时器线程、事件触发线程、异步http请求线程、GUI线程。<br>所以在执行定时器、事件、ajax这些异步事件的时候是另外三个线程在执行代码，并不是JS引擎在做事情，在这些线程达到某一特定事件把任务放入JS引擎的线程中，同时GUI线程（渲染界面HTMl的线程）与JS线程是互斥的，在JS引擎执行时GUI线程会被冻结、挂起。<br>最后最后 JS是单线程但是浏览器是多线程。你的异步任务是浏览器开启对应的线程来执行的，最后放入JS引擎中进行执行。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JS/" rel="tag"># JS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/02/%E5%AE%9E%E7%8E%B0call-apply-bind/" rel="prev" title="实现call/apply/bind">
+      <i class="fa fa-chevron-left"></i> 实现call/apply/bind
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/11/1/" rel="next" title="1">
+      1 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要有同步异步？"><span class="nav-number">1.</span> <span class="nav-text">为什么要有同步异步？</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="gxz"
+      src="http://img5.imgtn.bdimg.com/it/u=1172245122,2404902455&fm=26&gp=0.jpg">
+  <p class="site-author-name" itemprop="name">gxz</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gxz2019" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gxz2019" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1173017852@qq.com" title="E-Mail → 1173017852@qq.com"><i class="fa fa-Email fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">gxz</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
