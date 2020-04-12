@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"gxz2019.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="浅拷贝浅拷贝的意思就是只复制引用，而未复制真正的值。 1234567891011121314151617const originArray &#x3D; [1,2,3,4,5];const originObj &#x3D; &amp;#123;a:&#39;a&#39;,b:&#39;b&#39;,c:[1,2,3],d:&amp;#123;dd:&#39;dd&#39;&amp;#125;&amp;#125;;const cloneArray &#x3D; originArray;const clone">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js深浅拷贝">
+<meta property="og:url" content="https://gxz2019.github.io/2020/03/05/js%E6%B7%B1%E6%B5%85%E6%8B%B7%E8%B4%9D/index.html">
+<meta property="og:site_name" content="北方的鬼">
+<meta property="og:description" content="浅拷贝浅拷贝的意思就是只复制引用，而未复制真正的值。 1234567891011121314151617const originArray &#x3D; [1,2,3,4,5];const originObj &#x3D; &amp;#123;a:&#39;a&#39;,b:&#39;b&#39;,c:[1,2,3],d:&amp;#123;dd:&#39;dd&#39;&amp;#125;&amp;#125;;const cloneArray &#x3D; originArray;const clone">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-05T08:53:23.000Z">
+<meta property="article:modified_time" content="2020-04-12T13:37:12.433Z">
+<meta property="article:author" content="gxz">
+<meta property="article:tag" content="JS">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://gxz2019.github.io/2020/03/05/js%E6%B7%B1%E6%B5%85%E6%8B%B7%E8%B4%9D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>js深浅拷贝 | 北方的鬼</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">北方的鬼</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://gxz2019.github.io/2020/03/05/js%E6%B7%B1%E6%B5%85%E6%8B%B7%E8%B4%9D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img5.imgtn.bdimg.com/it/u=1172245122,2404902455&fm=26&gp=0.jpg">
+      <meta itemprop="name" content="gxz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="北方的鬼">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          js深浅拷贝
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-05 16:53:23" itemprop="dateCreated datePublished" datetime="2020-03-05T16:53:23+08:00">2020-03-05</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="浅拷贝"><a href="#浅拷贝" class="headerlink" title="浅拷贝"></a>浅拷贝</h2><p>浅拷贝的意思就是只复制引用，而未复制真正的值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> originArray = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line"><span class="keyword">const</span> originObj = &#123;<span class="attr">a</span>:<span class="string">'a'</span>,<span class="attr">b</span>:<span class="string">'b'</span>,<span class="attr">c</span>:[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],<span class="attr">d</span>:&#123;<span class="attr">dd</span>:<span class="string">'dd'</span>&#125;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> cloneArray = originArray;</span><br><span class="line"><span class="keyword">const</span> cloneObj = originObj;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(cloneArray); <span class="comment">// [1,2,3,4,5]</span></span><br><span class="line"><span class="built_in">console</span>.log(originObj); <span class="comment">// &#123;a:'a',b:'b',c:Array[3],d:&#123;dd:'dd'&#125;&#125;</span></span><br><span class="line"></span><br><span class="line">cloneArray.push(<span class="number">6</span>);</span><br><span class="line">cloneObj.a = &#123;<span class="attr">aa</span>:<span class="string">'aa'</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(cloneArray); <span class="comment">// [1,2,3,4,5,6]</span></span><br><span class="line"><span class="built_in">console</span>.log(originArray); <span class="comment">// [1,2,3,4,5,6]</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(cloneObj); <span class="comment">// &#123;a:&#123;aa:'aa'&#125;,b:'b',c:Array[3],d:&#123;dd:'dd'&#125;&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(originArray); <span class="comment">// &#123;a:&#123;aa:'aa'&#125;,b:'b',c:Array[3],d:&#123;dd:'dd'&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p>上面的代码是最简单的利用 = 赋值操作符实现了一个浅拷贝，可以很清楚的看到，随着 cloneArray 和 cloneObj 改变，originArray 和 originObj 也随着发生了变化。</p>
+<h2 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h2><p>深拷贝就是对目标的完全拷贝，不像浅拷贝那样只是复制了一层引用，就连值也都复制了。</p>
+<p>只要进行了深拷贝，它们老死不相往来，谁也不会影响谁。</p>
+<p>目前实现深拷贝的方法不多，主要是两种：</p>
+<ul>
+<li>利用 JSON 对象中的 parse 和 stringify</li>
+<li>利用递归来实现每一层都重新创建对象并赋值</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">clone</span>(<span class="params">source</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> cloneObj = source.constructor === <span class="built_in">Array</span> ? [] : &#123;&#125;;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> source) &#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">typeof</span>(source[key]) == <span class="string">'object'</span>) &#123;</span><br><span class="line">      cloneObj[key] = source[key].constructor === <span class="built_in">Array</span> ? [] : <span class="built_in">Object</span>;</span><br><span class="line">      cloneObj[key] = clone(source[key])</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">      cloneObj[key] = source[key]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> cloneObj</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="JavaScript中的拷贝方法"><a href="#JavaScript中的拷贝方法" class="headerlink" title="JavaScript中的拷贝方法"></a>JavaScript中的拷贝方法</h3><p><strong>concat</strong><br>该方法可以连接两个或者更多的数组，但是它不会修改已存在的数组，而是返回一个新数组。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> originArray = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</span><br><span class="line"><span class="keyword">const</span> cloneArray = originArray.concat();</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(cloneArray === originArray); <span class="comment">// false</span></span><br><span class="line">cloneArray.push(<span class="number">6</span>); <span class="comment">// [1,2,3,4,5,6]</span></span><br><span class="line"><span class="built_in">console</span>.log(originArray); <span class="comment">//[1,2,3,4,5];</span></span><br></pre></td></tr></table></figure>
+<p>看上去是深拷贝<br>再看下面这一段代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> originArray = [<span class="number">1</span>,[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],&#123;<span class="attr">a</span>:<span class="number">1</span>&#125;];</span><br><span class="line"><span class="keyword">const</span> cloneArray = originArray.concat();</span><br><span class="line"><span class="built_in">console</span>.log(cloneArray === originArray); <span class="comment">// false</span></span><br><span class="line">cloneArray[<span class="number">1</span>].push(<span class="number">4</span>);</span><br><span class="line">cloneArray[<span class="number">2</span>].a = <span class="number">2</span>; </span><br><span class="line"><span class="built_in">console</span>.log(originArray); <span class="comment">// [1,[1,2,3,4],&#123;a:2&#125;]</span></span><br></pre></td></tr></table></figure>
+<p>originArray 中含有数组 [1,2,3] 和对象 {a:1}，如果我们直接修改数组和对象，不会影响 originArray，但是我们修改数组 [1,2,3] 或对象 {a:1} 时，发现 originArray 也发生了变化。</p>
+<p><strong>结论：concat 只是对数组的第一层进行深拷贝。</strong></p>
+<p><strong>slice</strong><br>同样的slice也只是能够对于数组第一层进行深拷贝，下一层以后的只能进行引用的传递</p>
+<p><strong>Object.assign()</strong><br>Object.assign() 拷贝的是属性值。假如源对象的属性值是一个指向对象的引用，它也只拷贝那个引用值。</p>
+<p><strong>… 展开运算符</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> originArray = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,[<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>]];</span><br><span class="line"><span class="keyword">const</span> originObj = &#123;<span class="attr">a</span>:<span class="number">1</span>,<span class="attr">b</span>:&#123;<span class="attr">bb</span>:<span class="number">1</span>&#125;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> cloneArray = [...originArray];</span><br><span class="line">cloneArray[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">cloneArray[<span class="number">5</span>].push(<span class="number">9</span>);</span><br><span class="line"><span class="built_in">console</span>.log(originArray); <span class="comment">// [1,2,3,4,5,[6,7,8,9]]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> cloneObj = &#123;...originObj&#125;;</span><br><span class="line">cloneObj.a = <span class="number">2</span>;</span><br><span class="line">cloneObj.b.bb = <span class="number">2</span>;</span><br><span class="line"><span class="built_in">console</span>.log(originObj); <span class="comment">// &#123;a:1,b:&#123;bb:2&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JS/" rel="tag"># JS</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/04/js%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B2/" rel="prev" title="js异步编程(2)">
+      <i class="fa fa-chevron-left"></i> js异步编程(2)
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/12/1/" rel="next" title="1">
+      1 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#浅拷贝"><span class="nav-number">1.</span> <span class="nav-text">浅拷贝</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#深拷贝"><span class="nav-number">2.</span> <span class="nav-text">深拷贝</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript中的拷贝方法"><span class="nav-number">2.1.</span> <span class="nav-text">JavaScript中的拷贝方法</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="gxz"
+      src="http://img5.imgtn.bdimg.com/it/u=1172245122,2404902455&fm=26&gp=0.jpg">
+  <p class="site-author-name" itemprop="name">gxz</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gxz2019" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gxz2019" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/1173017852@qq.com" title="E-Mail → 1173017852@qq.com"><i class="fa fa-Email fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">gxz</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
