@@ -290,6 +290,88 @@ promise2.then(res=>{
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://gxz2019.github.io/2020/03/04/js%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://img5.imgtn.bdimg.com/it/u=1172245122,2404902455&fm=26&gp=0.jpg">
+      <meta itemprop="name" content="gxz">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="北方的鬼">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/04/js%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B2/" class="post-title-link" itemprop="url">js异步编程(2)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-04 11:01:06" itemprop="dateCreated datePublished" datetime="2020-03-04T11:01:06+08:00">2020-03-04</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>转载：<a href="https://juejin.im/post/5b6aafa9e51d451994603661#comment" target="_blank" rel="noopener">https://juejin.im/post/5b6aafa9e51d451994603661#comment</a></p>
+<p>异步与同步相比，最难以掌控的就是异步的任务会什么时候完成和完成之后的回调问题，</p>
+<p>难以掌控的触发状态，让你自己写的代码当时还可以读懂，但是过几天、半个月之后如果不重新盘一边逻辑，你哪知道哪个内容会先执行，借用这么一个例子:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">listen( <span class="string">"click"</span>, <span class="function"><span class="keyword">function</span> <span class="title">handler</span>(<span class="params">evt</span>)</span>&#123;</span><br><span class="line">	setTimeout( <span class="function"><span class="keyword">function</span> <span class="title">request</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">		ajax( <span class="string">"http://some.url.1"</span>, <span class="function"><span class="keyword">function</span> <span class="title">response</span>(<span class="params">text</span>)</span>&#123;</span><br><span class="line">			<span class="keyword">if</span> (text == <span class="string">"hello"</span>) &#123;</span><br><span class="line">				handler();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">else</span> <span class="keyword">if</span> (text == <span class="string">"world"</span>) &#123;</span><br><span class="line">				request();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; );</span><br><span class="line">	&#125;, <span class="number">500</span>) ;</span><br><span class="line">&#125; );</span><br><span class="line"></span><br><span class="line">doSomething();</span><br></pre></td></tr></table></figure>
+<p>很难以理解这种地狱式的回调（回调地狱）会对可读性有多么大的摧毁。<br>首先 执行listern（）<br>其次 doSomething（）<br>500ms（或者更远）后执行ajax（）<br>ajax完成后<br>如果text === hello 执行handler（）<br>如果text === world 执行request（）</p>
+<p><strong>promise</strong><br>Promise的实例有三个状态，Pending（进行中）、Resolved（已完成）、Rejected（已拒绝）。当你把一件事情交给promise时，它的状态就是Pending，任务完成了状态就变成了Resolved、没有完成失败了就变成了Rejected。<br>言归正传：写一个简单的promise</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>)=&gt;</span>&#123;</span><br><span class="line">    <span class="comment">// 接收一个callback。参数是成功函数与失败函数</span></span><br><span class="line">	setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">       <span class="keyword">let</span> num = <span class="built_in">parseInt</span>(<span class="built_in">Math</span>.random()*<span class="number">100</span>);</span><br><span class="line">       <span class="comment">// 如果数字大于50就调用成功的函数，并且将状态变成Resolved</span></span><br><span class="line">       <span class="keyword">if</span>(num &gt; <span class="number">50</span>)&#123;</span><br><span class="line">          resolve(num);</span><br><span class="line">       &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="comment">// 否则就调用失败的函数，将状态变成Rejected</span></span><br><span class="line">          reject(num)</span><br><span class="line">       &#125;</span><br><span class="line">	&#125;,<span class="number">10000</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>当Promise执行的内容符合你预期的成功条件的话，就调用resolve函数，失败就调用reject函数，这两个函数的参数会被promise捕捉到。可以在之后的回调中使用。</p>
+<p>创建一个承诺我们已经做完了，那么如何使用承诺后的结果呢？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">promise.then(<span class="function"><span class="params">res</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">    <span class="comment">//在构造函数中如果你执行力resolve函数就会到这一步</span></span><br><span class="line">&#125;,err=&gt;&#123;</span><br><span class="line">    <span class="comment">// 执行了reject函数会到这一步</span></span><br><span class="line">    <span class="built_in">console</span>.log(err);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>then方法接收两个函数，第一个是承诺成功（状态为resolved）的回调函数，一个承诺失败（状态为rejected）的回调函数。</p>
+<p>then方法的返回值不是一个promise对象就会被包装成一个promise对象，所以then方法支持链式调用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">promise.then(<span class="function"><span class="params">res</span>=&gt;</span>&#123; <span class="keyword">return</span> <span class="number">42</span>&#125;).then(<span class="function"><span class="params">res</span>=&gt;</span>&#123;<span class="built_in">console</span>.log(res)&#125;)</span><br><span class="line"><span class="comment">// 打印出42</span></span><br></pre></td></tr></table></figure>
+<p>then方法的链式调用可以帮我们串行的解决一些逻辑，当我们平时书写有顺序的异步时间，比如</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ajax(<span class="string">'first'</span>);</span><br><span class="line">ajax(<span class="string">'second'</span>);</span><br><span class="line">ajax(<span class="string">'third'</span>);</span><br><span class="line">需要按顺序来执行怎么办？</span><br><span class="line">ajax(<span class="string">'first'</span>).success(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</span><br><span class="line">    ajax(<span class="string">'second'</span>).success(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</span><br><span class="line">        ajax(<span class="string">'third'</span>).success(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</span><br><span class="line">            <span class="comment">//串行完毕可以执行你想要的内容了</span></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>如果使用then的链式调用呢？</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> promise = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>)=&gt;</span>&#123;</span><br><span class="line">    ajax(<span class="string">'first'</span>).success(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</span><br><span class="line">        resolve(res);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line">promise.then(<span class="function"><span class="params">res</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resovle,reject</span>)=&gt;</span>&#123;</span><br><span class="line">        ajax(<span class="string">'second'</span>).success(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</span><br><span class="line">            resolve(res)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;).then(<span class="function"><span class="params">res</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resovle,reject</span>)=&gt;</span>&#123;</span><br><span class="line">        ajax(<span class="string">'second'</span>).success(<span class="function"><span class="keyword">function</span>(<span class="params">res</span>)</span>&#123;</span><br><span class="line">            resolve(res)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;).then(<span class="function"><span class="params">res</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="comment">// 串行完毕你要做的xxx可以开始了</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>而且每次执行resolve的时候，都可以把每次ajax的回调数据进行传递到最后。清晰简单明了。<br>说完串行了，那么并行怎么办？？？<br>当有多个异步事件，之间并无联系而且没有先后顺序，只需要全部完成就可以开始工作了。<br>串行会把每一个异步事件的等待时间进行一个相加，明显会对完成进行一个阻塞。那么并行的话该怎么确定全部完成呢？</p>
+<p><strong>Promise.all 与 Promise.race的妙用</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> promise1 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>)=&gt;</span>&#123;</span><br><span class="line">	setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">       resolve(<span class="number">1</span>);</span><br><span class="line">	&#125;,<span class="number">10000</span>)</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">let</span> promise2 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>)=&gt;</span>&#123;</span><br><span class="line">	setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">       resolve(<span class="number">2</span>);</span><br><span class="line">	&#125;,<span class="number">9000</span>)</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">let</span> promise3 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>)=&gt;</span>&#123;</span><br><span class="line">	setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">       resolve(<span class="number">3</span>);</span><br><span class="line">	&#125;,<span class="number">11000</span>)</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">Promise</span>.all([promise1,promise2,promise3]).then(<span class="function"><span class="params">res</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">    <span class="comment">//[1,2,3] 证明与哪个promise的状态先变成resolved无关</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> promiseAll =<span class="built_in">Promise</span>.all([promise1,promise2,promise3]);</span><br><span class="line">promiseAll.then(<span class="function"><span class="params">res</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res);</span><br><span class="line">&#125;,err=&gt;&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(err)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>Promise.race 竞速模式 也是接受一个每一项都是promise的数组。但是与all不同的是，第一个promise对象状态变成resolved时自身的状态变成了resolved，第一个promise变成rejected自身状态就会变成rejected。第一个变成resolved的promsie的值就会被使用。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> promise1 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>)=&gt;</span>&#123;</span><br><span class="line">	setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">       reject(<span class="number">1</span>);</span><br><span class="line">	&#125;,<span class="number">10000</span>)</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">let</span> promise2 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>)=&gt;</span>&#123;</span><br><span class="line">	setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">       resolve(<span class="number">2</span>);</span><br><span class="line">	&#125;,<span class="number">9000</span>)</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">let</span> promise3 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve,reject</span>)=&gt;</span>&#123;</span><br><span class="line">	setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">       resolve(<span class="number">3</span>);</span><br><span class="line">	&#125;,<span class="number">11000</span>)</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">Promise</span>.race([promise1,promise2,promise3]).then(<span class="function"><span class="params">res</span>=&gt;</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(res);</span><br><span class="line">	<span class="comment">//打印出2 为什么不打印出1呢？因为promise2先完成了其余的就忽略来</span></span><br><span class="line">&#125;,rej=&gt;&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'rejected'</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(rej)&#125;;</span><br><span class="line">)</span><br><span class="line"><span class="comment">// 大家可以尝试自己改变时间进行测试</span></span><br></pre></td></tr></table></figure>
+<p>Promsie.race还有一个很重要的实际用处就是，有时候我们要去做一件事，但是超过三秒钟左右我们就不做了那怎么办？ 这个时候可以使用Promise.race方法</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Promise</span>.race([promise1,timeOutPromise(<span class="number">3000</span>)]).then(<span class="function"><span class="params">res</span>=&gt;</span>&#123;&#125;)</span><br><span class="line"><span class="comment">// timeOutPromise延时3s左右 由于是用setTimeout来实现的并不一定准确3s（一般主线程在开发中不会阻塞3s以上的所以不会有太大问题）</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://gxz2019.github.io/2020/03/03/JS%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -328,7 +410,7 @@ promise2.then(res=>{
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>作者：酸楚与甘甜<br>链接：<a href="https://juejin.im/post/5b56c3586fb9a04faa79a8e0" target="_blank" rel="noopener">https://juejin.im/post/5b56c3586fb9a04faa79a8e0</a><br>来源：掘金</p>
+          <p>转载于<br>作者：酸楚与甘甜<br>链接：<a href="https://juejin.im/post/5b56c3586fb9a04faa79a8e0" target="_blank" rel="noopener">https://juejin.im/post/5b56c3586fb9a04faa79a8e0</a><br>来源：掘金</p>
 <h2 id="为什么要有同步异步？"><a href="#为什么要有同步异步？" class="headerlink" title="为什么要有同步异步？"></a>为什么要有同步异步？</h2><p>首先JS是一个单线程的语言。单线程的含义类似于从头走到尾，谁也别管谁，前面堵车我就停（官方：单线程在程序执行时，所走的程序路径按照连续顺序排下来，前面的必须处理好，后面的才会执行。），没办法开多个线程。</p>
 <p>疑问来了？为什么JS不设计成多线程的可以开多个线程同时操作。JS是可以去操作DOM的。假设JS设计成一个多线程语言。你的主线程在给DOM的innerHtml做一个赋值操作，你的另一个线程把这个DOM结构删除了。。。。这肯定不可以。（多线程可以互不干预的操作一段内存空间）。所以干脆设计成一个单线程，哪怕后期HTML5出现的web worker也是不允许操作DOM结构的，可以完成一些分布式的计算。对于dom结构我们必须顺序操纵，坚决不允许出现对同一个dom同时进行操作。</p>
           <!--noindex-->
@@ -813,72 +895,6 @@ promise2.then(res=>{
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://gxz2019.github.io/2020/02/14/%E9%97%AD%E5%8C%852/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="http://img5.imgtn.bdimg.com/it/u=1172245122,2404902455&fm=26&gp=0.jpg">
-      <meta itemprop="name" content="gxz">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="北方的鬼">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/02/14/%E9%97%AD%E5%8C%852/" class="post-title-link" itemprop="url">闭包(2)——高阶函数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-02-14 13:52:39" itemprop="dateCreated datePublished" datetime="2020-02-14T13:52:39+08:00">2020-02-14</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="理解抽象"><a href="#理解抽象" class="headerlink" title="理解抽象"></a>理解抽象</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">createDiv</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">  <span class="built_in">document</span>.body.appendChild(div);</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> callback === <span class="string">'function'</span>) &#123;</span><br><span class="line">    callback(div);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">createDiv(<span class="function"><span class="keyword">function</span> (<span class="params">div</span>) </span>&#123;</span><br><span class="line">  div.style.color = <span class="string">'red'</span>;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>这个例子中，有一个createDiv这个函数，这个函数负责创建一个div并添加到页面中，但是之后要再怎么操作这个div，createDiv这个函数就不知道，所以把权限交给调用createDiv函数的人，让调用者决定接下来的操作，就通过回调的方式将div给调用者。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/02/14/%E9%97%AD%E5%8C%852/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -950,7 +966,7 @@ promise2.then(res=>{
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
