@@ -29,7 +29,7 @@
 <meta property="og:description" content="如何使用 axios发送请求 12345678axios(&amp;#123;  method:&#39;get&#39;,  url:&#39;xxxxx&#39;,  responseType:&#39;stream&#39;&amp;#125;)  .then(function(response) &amp;#123;    ........&amp;#125;); 可以看出，axios函数返回了一个Promise对象 添加拦截器函数 什么是拦截器？拦截每一次你的请求和">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-03-14T07:43:55.000Z">
-<meta property="article:modified_time" content="2020-04-17T15:23:04.429Z">
+<meta property="article:modified_time" content="2020-04-18T01:10:17.783Z">
 <meta property="article:author" content="gxz">
 <meta property="article:tag" content="HTTP">
 <meta name="twitter:card" content="summary">
@@ -204,6 +204,7 @@
 <p>可以看出，axios函数返回了一个Promise对象</p>
 <p><strong>添加拦截器函数</strong></p>
 <p><strong>什么是拦截器？</strong><br>拦截每一次你的请求和响应，然后进行相应的处理。比如一些网站过了一定的时间不进行操作，就会退出登录让你重新登陆页面，当然这不用拦截器你或许也可以完成这功能，但是会很麻烦而且代码会产生大量重复，所以我们需要用到拦截器</p>
+<a id="more"></a>
 <p><strong>请求拦截器</strong></p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">axios.interceptors.request.use(</span><br><span class="line">  config =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> token = sessionStorage.getItem(<span class="string">'token'</span>)</span><br><span class="line">    <span class="keyword">if</span> (token ) &#123; <span class="comment">// 判断是否存在token，如果存在的话，则每个http header都加上token</span></span><br><span class="line">      config.headers.authorization = token  <span class="comment">//请求头加上token</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> config</span><br><span class="line">  &#125;,</span><br><span class="line">  err =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(err)</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure>
 <p>这个拦截器会在你发送请求之前运行<br>这个请求拦截器的功能是为我每一次请求去判断是否有token，如果token存在则在请求头加上这个token。后台会判断我这个token是否过期。</p>
@@ -235,7 +236,10 @@
     <a href="/2020/03/10/HTTP/" rel="prev" title="HTTP">
       <i class="fa fa-chevron-left"></i> HTTP
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/16/%E5%B0%81%E8%A3%85%E4%B8%80%E4%B8%AA%E5%8D%95%E5%90%91%E9%93%BE%E8%A1%A8/" rel="next" title="封装一个单向链表">
+      封装一个单向链表 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -310,7 +314,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
